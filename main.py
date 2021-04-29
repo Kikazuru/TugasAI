@@ -65,6 +65,7 @@ if __name__ == '__main__':
     dipilih = [0] * len(daftar_lokasi)
 
     tsp = TSP()
+    tsp.add_node(daftar_lokasi[0])
     while True:
         print("Pilih menu : ")
         print("1. Tambah lokasi")
