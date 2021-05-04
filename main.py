@@ -3,6 +3,8 @@ from os import system
 import networkx as nx
 import matplotlib.pyplot as plt
 from utm import from_latlon
+from sys import maxsize
+from itertools import permutations
 
 class TSP:
     def __init__(self):
@@ -49,6 +51,31 @@ class TSP:
                 self.graf[i][j] = round(jarak, 4)
                 self.graf[j][i] = round(jarak, 4)
     
+    def solve(self):
+        vertex = [i for i in range(1, len(self.graf))]
+
+        min_path = maxsize # 99999
+        next_permutation = permutations(vertex)
+        hasil_jalur_terbaik = None
+
+        for permutasi in next_permutation:
+            current_pathweight = 0
+
+            k = 0
+            for j in permutasi:
+                current_pathweight += self.graf[k][j]
+
+                k = j
+            current_pathweight += self.graf[k][0]
+
+            if current_pathweight < min_path:
+                min_path = current_pathweight
+                hasil_jalur_terbaik = permutasi
+
+        hasil_jalur_terbaik = [self.daftar_lokasi[0]["nama"]] + [self.daftar_lokasi[i]["nama"] for i in hasil_jalur_terbaik]
+        return hasil_jalur_terbaik, min_path
+
+
 
 def show_pilihan(daftar_lokasi, dipilih):
     print("Pilih lokasi : ")
@@ -66,16 +93,19 @@ if __name__ == '__main__':
 
     tsp = TSP()
     tsp.add_node(daftar_lokasi[0])
+    dipilih[0] = 1
     while True:
         print("Pilih menu : ")
         print("1. Tambah lokasi")
         print("2. Tampilkan graf")
-        print("3. Exit")
+        print("3. Hasil")
+        print("4. Exit")
         n = input(": ")
         if n == "1":
             while True:
                 show_pilihan(daftar_lokasi, dipilih)
                 try:
+                    #problem disini bug pilihan
                     n = abs(int(input(": ")) - 1)
                     system("clear")
                     
@@ -92,8 +122,13 @@ if __name__ == '__main__':
                 except:
                     print("Pilihan tidak ditemukan!") 
         elif n == '2':
+            print(tsp.graf)
             tsp.show_graf()
         elif n == '3':
+            hasil_jalur_terbaik, bobot_minimal = tsp.solve()
+            print(hasil_jalur_terbaik)
+            print(bobot_minimal)
+        elif n == '4':
             break
     
     
