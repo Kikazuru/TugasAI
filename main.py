@@ -78,14 +78,51 @@ class TSP:
         hasil_jalur_terbaik = [self.daftar_lokasi[0]["nama"]] + [self.daftar_lokasi[i]["nama"] for i in hasil_jalur_terbaik]
         return hasil_jalur_terbaik, min_path
     
+    def getCombination(self, arr, combination):
+        comb = []
+        for x, y in combination:
+            temp = arr.copy()
+            temp[x], temp[y] = temp[y], temp[x]
+            comb.append(temp)
+        return comb
+
+    def evaluate(self, arr):
+        cost = 0
+        frm = 0
+        for to in arr:
+            cost += self.graf[frm][to]
+            frm = to
+        return cost
+
     # simple hill climbing
     def solve2(self):
         # mencari kombinasi untuk operator switch
         temp = []
+        n = len(self.graf)
 
-        for i in range(1,6):
-            for j in range(i + 1, 6):
+        for i in range(0,n):
+            for j in range(i + 1, n):
                 temp.append((i,j))
+
+        initial_path = [i for i in range(n)]
+        min_cost = (initial_path, self.evaluate(initial_path))
+
+        tabu_list = [initial_path]
+
+        while True:
+            list_combination = self.getCombination(min_cost[0], temp)
+            for comb in list_combination:
+                if comb not in tabu_list:
+                    cost = self.evaluate(comb)
+                    if cost < min_cost[1]:
+                        min_cost = (comb, cost)
+                        tabu_list.append(comb)
+                        break
+            else:
+                break
+        
+        min_cost = ([self.daftar_lokasi[i]["nama"] for i in min_cost[0]], min_cost[1])
+        return min_cost
 
 
 
@@ -138,7 +175,8 @@ if __name__ == '__main__':
             print(tsp.graf)
             tsp.show_graf()
         elif n == '3':
-            hasil_jalur_terbaik, bobot_minimal = tsp.solve()
+            # hasil_jalur_terbaik, bobot_minimal = tsp.solve()
+            hasil_jalur_terbaik, bobot_minimal = tsp.solve2()
             print(hasil_jalur_terbaik)
             print(bobot_minimal)
         elif n == '4':
