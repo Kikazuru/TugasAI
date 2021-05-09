@@ -52,7 +52,8 @@ class TSP:
                 jarak = (abs(x1 - x2) ** 2 + abs(y1 - y2) ** 2) ** (0.5)
                 self.graf[i][j] = round(jarak, 4)
                 self.graf[j][i] = round(jarak, 4)
-    
+
+    # generate and test    
     def solve(self):
         vertex = [i for i in range(1, len(self.graf))]
 
@@ -67,7 +68,7 @@ class TSP:
             for j in permutasi:
                 current_pathweight += self.graf[k][j]
                 k = j
-                
+
             current_pathweight += self.graf[k][0]
 
             if current_pathweight < min_path:
@@ -76,6 +77,15 @@ class TSP:
 
         hasil_jalur_terbaik = [self.daftar_lokasi[0]["nama"]] + [self.daftar_lokasi[i]["nama"] for i in hasil_jalur_terbaik]
         return hasil_jalur_terbaik, min_path
+    
+    # simple hill climbing
+    def solve2(self):
+        # mencari kombinasi untuk operator switch
+        temp = []
+
+        for i in range(1,6):
+            for j in range(i + 1, 6):
+                temp.append((i,j))
 
 
 
@@ -109,7 +119,6 @@ if __name__ == '__main__':
             while True:
                 show_pilihan(daftar_lokasi, dipilih)
                 try:
-                    #problem disini bug pilihan
                     n = int(input(": "))
                     system("clear")
                     

@@ -1,17 +1,9 @@
-from utm import from_latlon
-from json import load
+import itertools
+x = [i for i in range(1, 6)]
+print(list(itertools.combinations(x,2)))
 
-temp = load(open("lokasi.json"))
-
-utm = {}
-
-for lokasi in temp:
-    nama = lokasi["nama"]
-    koor = lokasi["koordinat"]
-
-    print(f"nama : {nama}")
-    koor = from_latlon(koor[0], koor[1])
-    utm[nama] = (koor[0], koor[1])
-
-for x, y in utm.items():
-    print(x, y)
+temp = []
+for i in range(1,6):
+    for j in range(i + 1, 6):
+        temp.append((i,j))
+print(temp)
