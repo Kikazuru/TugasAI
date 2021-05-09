@@ -1,7 +1,9 @@
 from json import load
 from os import system
+
 import networkx as nx
 import matplotlib.pyplot as plt
+
 from utm import from_latlon
 from sys import maxsize
 from itertools import permutations
@@ -64,8 +66,8 @@ class TSP:
             k = 0
             for j in permutasi:
                 current_pathweight += self.graf[k][j]
-
                 k = j
+                
             current_pathweight += self.graf[k][0]
 
             if current_pathweight < min_path:
@@ -79,7 +81,7 @@ class TSP:
 
 def show_pilihan(daftar_lokasi, dipilih):
     print("Pilih lokasi : ")
-    i = 1
+    i = 0
     for cek, lokasi in zip(dipilih, daftar_lokasi):
         nama = lokasi['nama']
         if not cek:
@@ -92,8 +94,10 @@ if __name__ == '__main__':
     dipilih = [0] * len(daftar_lokasi)
 
     tsp = TSP()
+
     tsp.add_node(daftar_lokasi[0])
     dipilih[0] = 1
+
     while True:
         print("Pilih menu : ")
         print("1. Tambah lokasi")
@@ -106,14 +110,14 @@ if __name__ == '__main__':
                 show_pilihan(daftar_lokasi, dipilih)
                 try:
                     #problem disini bug pilihan
-                    n = abs(int(input(": ")) - 1)
+                    n = int(input(": "))
                     system("clear")
                     
                     if n == len(daftar_lokasi):
                         tsp.generate_graf()
                         break
 
-                    if not dipilih[n]:
+                    if -1 < n < len(daftar_lokasi) and not dipilih[n]:
                         dipilih[n] = 1
                         tsp.add_node(daftar_lokasi[n])
                     else:
