@@ -92,17 +92,19 @@ class TSP:
         for to in arr:
             cost += self.graf[frm][to]
             frm = to
+
+        cost += self.graf[frm][0]
         return cost
 
     # simple hill climbing
     def solve2(self):
         # mencari kombinasi untuk operator switch
-        temp = []
+        operator = []
         n = len(self.graf)
 
         for i in range(0,n):
             for j in range(i + 1, n):
-                temp.append((i,j))
+                operator.append((i,j))
 
         initial_path = [i for i in range(n)]
         min_cost = (initial_path, self.evaluate(initial_path))
@@ -110,7 +112,7 @@ class TSP:
         tabu_list = [initial_path]
 
         while True:
-            list_combination = self.getCombination(min_cost[0], temp)
+            list_combination = self.getCombination(min_cost[0], operator)
             for comb in list_combination:
                 if comb not in tabu_list:
                     cost = self.evaluate(comb)
@@ -175,10 +177,10 @@ if __name__ == '__main__':
             print(tsp.graf)
             tsp.show_graf()
         elif n == '3':
-            # hasil_jalur_terbaik, bobot_minimal = tsp.solve()
-            hasil_jalur_terbaik, bobot_minimal = tsp.solve2()
-            print(hasil_jalur_terbaik)
-            print(bobot_minimal)
+            hasil_jalur_terbaik1, bobot_minimal1 = tsp.solve()
+            hasil_jalur_terbaik2, bobot_minimal2 = tsp.solve2()
+            print(hasil_jalur_terbaik1, bobot_minimal1)
+            print(hasil_jalur_terbaik2, bobot_minimal2)
         elif n == '4':
             break
     
