@@ -126,6 +126,38 @@ class TSP:
         min_cost = ([self.daftar_lokasi[i]["nama"] for i in min_cost[0]], min_cost[1])
         return min_cost
 
+    # SAHC
+    def solve3(self):
+        # mencari kombinasi untuk operator switch
+        operator = []
+        n = len(self.graf)
+
+        for i in range(0,n):
+            for j in range(i + 1, n):
+                operator.append((i,j))
+
+        initial_path = [i for i in range(n)]
+        min_cost = (initial_path, self.evaluate(initial_path))
+
+        tabu_list = [initial_path]
+
+        while True:
+            list_combination = self.getCombination(min_cost[0], operator)
+            cek = False
+            for comb in list_combination:
+                if comb not in tabu_list:
+                    cost = self.evaluate(comb)
+                    if cost < min_cost[1]:
+                        cek = True
+                        min_cost = (comb, cost)
+                        tabu_list.append(comb)
+            
+            if not cek:
+                break
+        
+        min_cost = ([self.daftar_lokasi[i]["nama"] for i in min_cost[0]], min_cost[1])
+        return min_cost
+
 
 
 def show_pilihan(daftar_lokasi, dipilih):
@@ -139,6 +171,9 @@ def show_pilihan(daftar_lokasi, dipilih):
     print(f"{i}. KELUAR")
 
 if __name__ == '__main__':
+# milih posisi awal di bandara, stasiun, terminal
+
+
     daftar_lokasi = load((open("lokasi.json")))
     dipilih = [0] * len(daftar_lokasi)
 
@@ -174,13 +209,16 @@ if __name__ == '__main__':
                 except:
                     print("Pilihan tidak ditemukan!") 
         elif n == '2':
-            print(tsp.graf)
+            for i in tsp.graf:
+                print(i)
             tsp.show_graf()
         elif n == '3':
             hasil_jalur_terbaik1, bobot_minimal1 = tsp.solve()
             hasil_jalur_terbaik2, bobot_minimal2 = tsp.solve2()
+            hasil_jalur_terbaik3, bobot_minimal3 = tsp.solve3()
             print(hasil_jalur_terbaik1, bobot_minimal1)
             print(hasil_jalur_terbaik2, bobot_minimal2)
+            print(hasil_jalur_terbaik3, bobot_minimal3)
         elif n == '4':
             break
     
