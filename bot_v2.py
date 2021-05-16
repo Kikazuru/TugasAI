@@ -1,5 +1,4 @@
 import logging
-from typing import Text
 
 from ShortDest import TSP
 
@@ -109,10 +108,13 @@ def add_location(update: Update, context: CallbackContext) -> str:
         text = "Lokasi anda berhasil ditambahkan!"
     else:
         venue = res.venue
-        title = venue.title
-        addr = venue.address
-        context.user_data[RESULT].add_node(title, (ltd, lng))
-        text = f"{title}, {addr}\nBerhasil ditambahkan!"
+        if venue:
+            title = venue.title
+            addr = venue.address
+            context.user_data[RESULT].add_node(title, (ltd, lng))
+            text = f"{title}, {addr}\nBerhasil ditambahkan!"
+        else:
+            text = "Anda tidak dapat menambahkan lokasi anda saat ini sebagai destinasi wisata"
     
     update.message.reply_text(text)
 
