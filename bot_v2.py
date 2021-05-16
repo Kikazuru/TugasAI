@@ -241,13 +241,12 @@ def main() -> None:
         states={
             SELECTING_ACTION : selection_handler,
             ADDING_LOC: [MessageHandler(Filters.location, add_location)],
+            END: [CommandHandler('start', start)]
         },
         fallbacks=[CommandHandler('stop', stop)],
     )
 
     dispatcher.add_handler(conv_handler)
-
-    print("start")
 
     # Start the Bot
     updater.start_polling()
