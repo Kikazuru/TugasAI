@@ -161,7 +161,6 @@ def generate_result(update: Update, context: CallbackContext) -> str:
     
     text = None
     if mincost:
-        # urutan path di sempurnakan
         path = " --> ".join(mincost[0])
         jarak = round(mincost[1],2)
 

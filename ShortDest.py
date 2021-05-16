@@ -103,6 +103,11 @@ class TSP:
                 if not cek:
                     break
             
-            min_cost = ([self.daftar_lokasi[i]["nama"] for i in min_cost[0]], min_cost[1])
+            path = min_cost[0]
+            idx = path.index(0)
+
+            path = path[idx:] + path[:idx]
+
+            min_cost = ([self.daftar_lokasi[i]["nama"] for i in path], min_cost[1])
 
             return min_cost
