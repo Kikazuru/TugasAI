@@ -1,5 +1,6 @@
 import networkx as nx
 import matplotlib.pyplot as plt
+from networkx.algorithms.shortest_paths import weighted
 
 from utm import from_latlon
 
@@ -8,9 +9,10 @@ class TSP:
         self.daftar_lokasi = [None]
         self.graf = None
         self.n = None
+        self.path = None
 
-    def show_graf(self):
-        G = nx.Graph()
+    def show_graf(self, file_path):
+        G = nx.DiGraph()
         
         for lokasi in self.daftar_lokasi:
             nama = lokasi["nama"]
@@ -26,9 +28,41 @@ class TSP:
         pos=nx.get_node_attributes(G,'pos')
         nx.draw(G,pos)
         nx.draw_networkx_labels(G, pos, font_size=12, font_family="sans-serif")
+
         labels = nx.get_edge_attributes(G,'weight')
         nx.draw_networkx_edge_labels(G,pos,edge_labels=labels)
-        plt.savefig("figure/hasil.png")
+
+        plt.savefig(file_path, format="png")
+
+    def show_result(self, file_path):
+        G = nx.DiGraph()
+
+        path = self.path[::-1]
+
+        for idx in path:
+            lokasi = self.daftar_lokasi[idx]
+            nama = lokasi["nama"]
+            koordinat = lokasi["koordinat"]
+            G.add_node(nama, pos=(koordinat[0],koordinat[1]))
+        
+        for idx in range(1, len(path)):
+            titik1 = path[idx]
+            titik2 = path[idx - 1]
+
+            nama1 = self.daftar_lokasi[titik1]["nama"]
+            nama2 = self.daftar_lokasi[titik2]["nama"]
+
+            G.add_edge(nama1, nama2, weight= self.graf[titik1][titik2])
+        
+        pos=nx.get_node_attributes(G,'pos')
+        nx.draw(G,pos)
+        nx.draw_networkx_labels(G, pos, font_size=12, font_family="sans-serif")
+
+        labels = nx.get_edge_attributes(G,'weight')
+        nx.draw_networkx_edge_labels(G,pos,edge_labels=labels)
+
+        plt.savefig(file_path, format="png")
+        plt.close()
 
     def conversion(self, location):
         res = from_latlon(location[0], location[1])[:2]
@@ -70,7 +104,6 @@ class TSP:
             cost += self.graf[frm][to]
             frm = to
 
-        cost += self.graf[frm][0]
         return cost
 
     # SAHC
@@ -107,6 +140,7 @@ class TSP:
             idx = path.index(0)
 
             path = path[idx:] + path[:idx]
+            self.path = path
 
             min_cost = ([self.daftar_lokasi[i]["nama"] for i in path], min_cost[1])
 
