@@ -33,6 +33,7 @@ class TSP:
         nx.draw_networkx_edge_labels(G,pos,edge_labels=labels)
 
         plt.savefig(file_path, format="png")
+        plt.close()
 
     def show_result(self, file_path):
         G = nx.DiGraph()
@@ -52,7 +53,9 @@ class TSP:
             nama1 = self.daftar_lokasi[titik1]["nama"]
             nama2 = self.daftar_lokasi[titik2]["nama"]
 
-            G.add_edge(nama1, nama2, weight= self.graf[titik1][titik2])
+            bobot = round(self.graf[titik1][titik2], 2)
+
+            G.add_edge(nama1, nama2, weight= bobot)
         
         pos=nx.get_node_attributes(G,'pos')
         nx.draw(G,pos)
@@ -108,40 +111,40 @@ class TSP:
 
     # SAHC
     def solve(self):
-        # mencari kombinasi untuk operator switch
         operator = []
         n = self.n
 
         if n != None:
+            # mencari kombinasi untuk operator switch
             for i in range(0,n):
                 for j in range(i + 1, n):
                     operator.append((i,j))
 
+            # inisialisasi nilai awal
             initial_path = [i for i in range(n)]
-            min_cost = (initial_path, self.evaluate(initial_path))
+            path, min_cost = initial_path, self.evaluate(initial_path)
 
             tabu_list = [initial_path]
 
             while True:
-                list_combination = self.getCombination(min_cost[0], operator)
-                cek = False
-                for comb in list_combination:
-                    if comb not in tabu_list:
-                        cost = self.evaluate(comb)
-                        if cost < min_cost[1]:
-                            cek = True
-                            min_cost = (comb, cost)
-                            tabu_list.append(comb)
+                combination_path = self.getCombination(path, operator)
+                updated = False
+                for new_path in combination_path:
+                    if new_path not in tabu_list:
+                        cost = self.evaluate(new_path)
+                        if cost < min_cost:
+                            updated = True
+                            path, min_cost = new_path, cost
+                            tabu_list.append(new_path)
                 
-                if not cek:
+                if not updated:
                     break
             
-            path = min_cost[0]
+            # urutan your location di atur ulang
             idx = path.index(0)
-
             path = path[idx:] + path[:idx]
             self.path = path
 
-            min_cost = ([self.daftar_lokasi[i]["nama"] for i in path], min_cost[1])
+            result = ([self.daftar_lokasi[i]["nama"] for i in path], min_cost)
 
-            return min_cost
+            return result
