@@ -1,6 +1,5 @@
 import networkx as nx
 import matplotlib.pyplot as plt
-from networkx.algorithms.shortest_paths import weighted
 
 from utm import from_latlon
 
