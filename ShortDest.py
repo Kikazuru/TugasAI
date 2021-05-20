@@ -11,7 +11,7 @@ class TSP:
         self.path = None
 
     def show_graf(self, file_path):
-        G = nx.DiGraph()
+        G = nx.Graph()
         
         for lokasi in self.daftar_lokasi:
             nama = lokasi["nama"]

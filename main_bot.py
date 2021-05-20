@@ -237,12 +237,16 @@ def clear(update: Update, context: CallbackContext) -> str:
     
     return start(update, context)
 
-def stop(update: Update, _: CallbackContext) -> str:
+def stop(update: Update, context: CallbackContext) -> str:
     """End Conversation by command."""
+    text = "Terima kasih sudah menggunakan neuRoute! 😁"
+    
+    if update.callback_query:
+        update.callback_query.answer()
 
-    update.callback_query.answer()
-
-    update.callback_query.edit_message_text(text="Terima kasih sudah menggunakan neuRoute! 😁")
+        update.callback_query.edit_message_text(text=text)
+    else:
+        context.bot.send_message(chat_id=update.effective_chat.id, text=text)
 
     return END
 
@@ -272,7 +276,7 @@ def helper(update: Update, context: CallbackContext) -> str:
 
 def main() -> None:
     # Create the Updater and pass it your bot's token.
-    updater = Updater("1744180713:AAEXrn0acXjMEv2nqX-M9Sy6meLAo_VjYYU")
+    updater = Updater("1744180713:AAG-I1xD1aixF7jQLysTsRFocE-3BNiILxE")
 
     # Get the dispatcher to register handlers
     dispatcher = updater.dispatcher
@@ -296,7 +300,9 @@ def main() -> None:
             ADDING_LOC: [MessageHandler(Filters.location, add_location)],
             END: [CommandHandler('start', start)]
         },
-        fallbacks=[],
+        fallbacks=[
+            CommandHandler('stop', stop)
+        ],
     )
 
     dispatcher.add_handler(conv_handler)
