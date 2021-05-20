@@ -115,7 +115,7 @@ class TSP:
 
         if n != None:
             # mencari kombinasi untuk operator switch
-            for i in range(0,n):
+            for i in range(1,n):
                 for j in range(i + 1, n):
                     operator.append((i,j))
 
@@ -135,13 +135,9 @@ class TSP:
                             updated = True
                             path, min_cost = new_path, cost
                             tabu_list.append(new_path)
-                
                 if not updated:
                     break
             
-            # urutan your location di atur ulang
-            idx = path.index(0)
-            path = path[idx:] + path[:idx]
             self.path = path
 
             result = ([self.daftar_lokasi[i]["nama"] for i in path], min_cost)

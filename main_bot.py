@@ -190,6 +190,7 @@ def generate_result(update: Update, context: CallbackContext) -> str:
         
         with NamedTemporaryFile(dir="figure", suffix=".png") as tmpfile:
             result.show_result(tmpfile)
+            # result.show_graf(tmpfile)
             tmpfile.seek(0)
             update.callback_query.delete_message()
             update.callback_query.bot.send_photo(chat_id=update.effective_chat.id, photo=tmpfile)
