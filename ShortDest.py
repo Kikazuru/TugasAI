@@ -134,9 +134,11 @@ class TSP:
                         if cost < min_cost:
                             updated = True
                             path, min_cost = new_path, cost
-                            tabu_list.append(new_path)
+                
                 if not updated:
                     break
+                else:
+                    tabu_list.append(path)
             
             self.path = path
 
