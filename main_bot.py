@@ -277,7 +277,7 @@ def helper(update: Update, context: CallbackContext) -> str:
 
 def main() -> None:
     # Create the Updater and pass it your bot's token.
-    updater = Updater("")
+    updater = Updater("1744180713:AAHDm1MzCQ5pqAmp4a6EpzdL_9Apie7dt48")
 
     # Get the dispatcher to register handlers
     dispatcher = updater.dispatcher
