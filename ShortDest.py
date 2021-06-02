@@ -134,7 +134,7 @@ class TSP:
                         if cost < min_cost:
                             updated = True
                             path, min_cost = new_path, cost
-                
+                            
                 if not updated:
                     break
                 else:
